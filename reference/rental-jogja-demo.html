@@ -1,0 +1,1685 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=DM+Sans:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.all.min.js"></script>
+    <script>
+      window.Swal ||
+        document.write(
+          '<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.14.5/sweetalert2.all.min.js"><\/script>',
+        );
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+    <script>
+      window.jspdf ||
+        document.write(
+          '<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"><\/script>',
+        );
+    </script>
+    <title>Jogja Rental Mobil</title>
+    <style>
+      :root {
+        --bg: #f3f5f9;
+        --card: #fff;
+        --tx: #121a2e;
+        --mut: #5d677d;
+        --pri: #d9a441;
+        --prt: #1a1204;
+        --lnk: #8a5d0c;
+        --bd: #e1e5ee;
+        --dng: #dc2626;
+        --wrn: #b7791f;
+        --ok: #15803d;
+        --ink: #101a33;
+        --r: 18px;
+        box-sizing: border-box;
+        padding-top: env(safe-area-inset-top, 0px);
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) {
+          --bg: #0c1222;
+          --card: #151e36;
+          --tx: #eef1f8;
+          --mut: #9aa6c0;
+          --lnk: #e8b954;
+          --bd: #26314e;
+        }
+      }
+      :root[data-theme="dark"] {
+        --bg: #0c1222;
+        --card: #151e36;
+        --tx: #eef1f8;
+        --mut: #9aa6c0;
+        --lnk: #e8b954;
+        --bd: #26314e;
+      }
+      html {
+        scroll-padding-top: calc(env(safe-area-inset-top, 0px) + 64px);
+        scroll-behavior: smooth;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--tx);
+        font:
+          15px/1.55 "DM Sans",
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          sans-serif;
+      }
+      h1,
+      h2,
+      .logo,
+      .price {
+        font-family: "Bricolage Grotesque", "DM Sans", system-ui, sans-serif;
+      }
+      header {
+        position: sticky;
+        top: env(safe-area-inset-top, 0px);
+        background: rgba(16, 26, 51, 0.92);
+        backdrop-filter: blur(10px);
+        color: #fff;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 18px;
+        z-index: 5;
+      }
+      header a {
+        color: #e8b954;
+        text-decoration: none;
+        font-weight: 600;
+      }
+      .logo {
+        font-weight: 800;
+        font-size: 1.1rem;
+        color: #fff !important;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .logo i {
+        font-style: normal;
+        background: var(--pri);
+        border-radius: 9px;
+        width: 30px;
+        height: 30px;
+        display: grid;
+        place-items: center;
+        font-size: 1rem;
+      }
+      a {
+        color: var(--lnk);
+      }
+      .wrap {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 16px;
+      }
+      .hero {
+        position: relative;
+        overflow: hidden;
+        background-color: var(--ink);
+        background-image:
+          radial-gradient(
+            circle at 50% 0,
+            transparent 15px,
+            rgba(217, 164, 65, 0.22) 16px,
+            transparent 17px
+          ),
+          radial-gradient(
+            circle at 0 50%,
+            transparent 15px,
+            rgba(217, 164, 65, 0.22) 16px,
+            transparent 17px
+          );
+        background-size: 34px 34px;
+        color: #fff;
+        border-radius: 24px;
+        padding: 34px 22px 26px;
+        margin-bottom: 22px;
+      }
+      .hero:after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          90deg,
+          var(--ink) 35%,
+          rgba(16, 26, 51, 0.55)
+        );
+        pointer-events: none;
+      }
+      .hero > * {
+        position: relative;
+        z-index: 1;
+      }
+      .hero h1 {
+        margin: 0 0 10px;
+        font-size: clamp(1.9rem, 7vw, 3rem);
+        line-height: 1.08;
+        font-weight: 800;
+        max-width: 15em;
+      }
+      .hero p {
+        margin: 0 0 18px;
+        max-width: 30em;
+        color: #cbd3e6;
+      }
+      .hero svg {
+        position: absolute;
+        right: -30px;
+        bottom: -6px;
+        width: min(60%, 380px);
+        z-index: 1;
+        opacity: 0.95;
+        animation: drive 1.1s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+      }
+      @keyframes drive {
+        from {
+          transform: translateX(120px);
+          opacity: 0;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .hero svg {
+          animation: none;
+        }
+        html {
+          scroll-behavior: auto;
+        }
+      }
+      .chips {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 18px;
+      }
+      .chip {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 99px;
+        padding: 5px 12px;
+        font-size: 0.82rem;
+        white-space: nowrap;
+      }
+      .cta {
+        display: inline-block;
+        background: var(--pri);
+        color: var(--prt);
+        padding: 12px 20px;
+        border-radius: 12px;
+        font-weight: 700;
+        text-decoration: none;
+      }
+      .scroll {
+        display: flex;
+        gap: 10px;
+        overflow-x: auto;
+        padding-bottom: 6px;
+      }
+      .dest {
+        flex: 0 0 auto;
+        background: var(--card);
+        border: 1px solid var(--bd);
+        border-radius: 14px;
+        padding: 10px 14px;
+        font-weight: 500;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 14px;
+      }
+      .card {
+        background: var(--card);
+        border: 1px solid var(--bd);
+        border-radius: var(--r);
+        padding: 16px;
+      }
+      .car {
+        padding: 0;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+      .car .top1 {
+        background: linear-gradient(135deg, var(--ink), #26407a);
+        padding: 22px 18px 14px;
+        font:
+          800 1.5rem/1 "Bricolage Grotesque",
+          sans-serif;
+        color: #f3e3bd;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+      }
+      .car .top1 small {
+        font-size: 0.75rem;
+        background: var(--pri);
+        color: var(--prt);
+        border-radius: 99px;
+        padding: 3px 10px;
+        font-weight: 700;
+        font-family: "DM Sans", sans-serif;
+      }
+      .car .bd {
+        padding: 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        flex: 1;
+      }
+      .car button {
+        margin-top: 10px;
+      }
+      .price {
+        color: var(--lnk);
+        font-weight: 800;
+        font-size: 1.15rem;
+      }
+      h2 {
+        font-size: 1.35rem;
+        margin: 28px 0 12px;
+        font-weight: 800;
+      }
+      .steps {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 12px;
+      }
+      .step b {
+        display: grid;
+        place-items: center;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: var(--ink);
+        color: var(--pri);
+        margin-bottom: 8px;
+        font-family: "Bricolage Grotesque", sans-serif;
+      }
+      label {
+        display: block;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: var(--mut);
+        margin: 12px 0 5px;
+      }
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1.5px solid var(--bd);
+        border-radius: 12px;
+        background: var(--bg);
+        color: var(--tx);
+        font: inherit;
+      }
+      input:focus,
+      select:focus,
+      textarea:focus,
+      button:focus-visible {
+        outline: 3px solid rgba(217, 164, 65, 0.55);
+        outline-offset: 1px;
+        border-color: var(--pri);
+      }
+      button {
+        font: inherit;
+        border: 0;
+        border-radius: 12px;
+        padding: 11px 15px;
+        cursor: pointer;
+        background: var(--pri);
+        color: var(--prt);
+        font-weight: 700;
+      }
+      button.g {
+        background: transparent;
+        color: var(--tx);
+        border: 1px solid var(--bd);
+      }
+      button.d {
+        background: var(--dng);
+        color: #fff;
+      }
+      button.w {
+        background: #25d366;
+        color: #04230f;
+      }
+      .full {
+        width: 100%;
+        margin-top: 16px;
+        padding: 14px;
+      }
+      .est {
+        margin-top: 14px;
+        padding: 12px 14px;
+        border-radius: 12px;
+        background: var(--bg);
+        border: 1px dashed var(--pri);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .est b {
+        font-family: "Bricolage Grotesque", sans-serif;
+        font-size: 1.2rem;
+        color: var(--lnk);
+      }
+      .formgrid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0 12px;
+      }
+      .formgrid .s2 {
+        grid-column: 1/-1;
+      }
+      @media (max-width: 520px) {
+        .formgrid {
+          grid-template-columns: 1fr;
+        }
+        .hero svg {
+          opacity: 0.35;
+        }
+        .hero:after {
+          background: rgba(16, 26, 51, 0.55);
+        }
+      }
+      .row {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+      }
+      .tabs {
+        display: flex;
+        gap: 6px;
+        margin-bottom: 14px;
+        overflow-x: auto;
+      }
+      .tabs button {
+        white-space: nowrap;
+      }
+      .badge {
+        font-size: 0.72rem;
+        padding: 3px 10px;
+        border-radius: 99px;
+        color: #fff;
+        background: var(--wrn);
+        font-weight: 700;
+      }
+      .badge.ok {
+        background: var(--ok);
+      }
+      .badge.no {
+        background: var(--dng);
+      }
+      .item {
+        margin-bottom: 12px;
+      }
+      .item .top {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        align-items: center;
+      }
+      .mut {
+        color: var(--mut);
+        font-size: 0.88rem;
+      }
+      .hide {
+        display: none !important;
+      }
+      footer {
+        text-align: center;
+        color: var(--mut);
+        font-size: 0.82rem;
+        padding: 26px 0 10px;
+      }
+      #toasts {
+        position: fixed;
+        top: calc(env(safe-area-inset-top, 0px) + 66px);
+        left: 0;
+        right: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        z-index: 50;
+        pointer-events: none;
+      }
+      .toast {
+        background: var(--ink);
+        color: #fff;
+        padding: 12px 18px;
+        border-radius: 14px;
+        max-width: 90%;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        border-left: 5px solid #22c55e;
+        animation: drive2 0.3s both;
+      }
+      @keyframes drive2 {
+        from {
+          transform: translateY(-12px);
+          opacity: 0;
+        }
+      }
+      .toast.err {
+        border-color: var(--dng);
+      }
+      .toast.inf {
+        border-color: #3b82f6;
+      }
+      .modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(5, 10, 25, 0.6);
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        z-index: 40;
+      }
+      .modal > div {
+        background: var(--card);
+        width: 100%;
+        max-width: 520px;
+        border-radius: 22px 22px 0 0;
+        padding: 20px;
+        max-height: 90%;
+        overflow: auto;
+      }
+      @media (min-width: 600px) {
+        .modal {
+          align-items: center;
+        }
+        .modal > div {
+          border-radius: 22px;
+        }
+      }
+      .demo {
+        font-size: 0.8rem;
+        background: var(--bg);
+        border: 1px dashed var(--bd);
+        border-radius: 10px;
+        padding: 8px;
+        margin-top: 12px;
+        color: var(--mut);
+      }
+      .cars {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      }
+      .vc {
+        display: flex;
+        flex-direction: column;
+      }
+      .vc .nm {
+        font:
+          800 1.15rem/1.2 "Bricolage Grotesque",
+          sans-serif;
+      }
+      .vc .mid {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        margin: 12px 0;
+      }
+      .chips2 {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        flex: 1;
+        align-content: center;
+      }
+      .chips2 span {
+        background: var(--bg);
+        border-radius: 8px;
+        padding: 4px 9px;
+        font-size: 0.78rem;
+        font-weight: 500;
+      }
+      .ph {
+        position: relative;
+        overflow: hidden;
+        flex: 0 0 48%;
+        aspect-ratio: 16/10;
+        border-radius: 10px;
+      }
+      .ph img,
+      .crop img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        transform-origin: center;
+        pointer-events: none;
+        user-select: none;
+      }
+      .nop {
+        width: 100%;
+        height: 100%;
+        color: var(--bd);
+        padding: 8px;
+      }
+      .vc .bt {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        border-top: 1px solid var(--bd);
+        padding-top: 12px;
+        gap: 10px;
+        margin-top: auto;
+      }
+      .vc .full {
+        margin-top: 12px;
+        padding: 11px;
+      }
+      .pr {
+        text-align: right;
+        line-height: 1.3;
+      }
+      .crop {
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        aspect-ratio: 16/10;
+        background: var(--bg);
+        border: 1.5px dashed var(--pri);
+        border-radius: 12px;
+        touch-action: none;
+        cursor: grab;
+      }
+      .hero .lg {
+        position: absolute;
+        right: 22px;
+        bottom: 22px;
+        width: min(36%, 250px);
+        height: auto;
+        background: #fff;
+        border-radius: 20px;
+        padding: 6px;
+        z-index: 1;
+        animation: drive 1.1s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+      }
+      @media (min-width: 521px) {
+        .hero > *:not(.lg) {
+          max-width: 60%;
+        }
+      }
+      @media (max-width: 520px) {
+        .hero .lg {
+          position: static;
+          display: block;
+          width: 62%;
+          margin: 20px auto 0;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .hero .lg {
+          animation: none;
+        }
+      }
+      .over {
+        position: static;
+      }
+      .swal2-popup {
+        background: var(--card) !important;
+        color: var(--tx) !important;
+        font-family: "DM Sans", system-ui, sans-serif !important;
+        border-radius: 20px !important;
+      }
+      .swal2-title {
+        color: var(--tx) !important;
+        font-family: "Bricolage Grotesque", sans-serif !important;
+      }
+      .swal2-html-container {
+        color: var(--mut) !important;
+      }
+      .swal2-confirm {
+        background: var(--pri) !important;
+        color: var(--prt) !important;
+        font-weight: 700 !important;
+        border-radius: 12px !important;
+      }
+      .swal2-cancel {
+        border-radius: 12px !important;
+      }
+      .swal2-container.swal2-top {
+        padding-top: calc(env(safe-area-inset-top, 0px) + 8px) !important;
+      }
+      .lp {
+        background: #fff;
+        border-radius: 14px;
+        padding: 8px;
+        max-width: 260px;
+      }
+      .lp img {
+        width: 100%;
+        display: block;
+      }
+      .okc {
+        border: 2px solid var(--ok);
+        margin-bottom: 12px;
+      }
+      .okc b {
+        color: var(--ok);
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a class="logo" href="#/"><i>J</i>Jogja Rental</a><span id="nav"></span>
+    </header>
+    <div id="toasts"></div>
+    <div class="wrap" id="app"></div>
+    <div id="modal" class="modal hide"></div>
+
+    <script>
+      const KEY = "jr_demo_v2";
+      const $ = (s) => document.querySelector(s);
+      const esc = (s) =>
+        String(s ?? "").replace(
+          /[&<>"']/g,
+          (c) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            })[c],
+        );
+      const rp = (n) => "Rp " + Number(n).toLocaleString("id-ID");
+      const uid = () =>
+        Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
+      const seed = {
+        wa: "6281234567890",
+        cars: [
+          {
+            id: "c1",
+            name: "Toyota Avanza",
+            cat: "atau setara MPV standar",
+            seat: 7,
+            bags: 1,
+            trans: "Manual",
+            ac: true,
+            price: 350000,
+          },
+          {
+            id: "c2",
+            name: "Toyota Innova Reborn",
+            cat: "atau setara MPV premium",
+            seat: 7,
+            bags: 2,
+            trans: "Otomatis",
+            ac: true,
+            price: 550000,
+          },
+          {
+            id: "c3",
+            name: "Daihatsu Ayla",
+            cat: "atau setara mini",
+            seat: 5,
+            bags: 1,
+            trans: "Manual",
+            ac: true,
+            price: 250000,
+          },
+          {
+            id: "c4",
+            name: "Toyota Hiace",
+            cat: "atau setara van penumpang",
+            seat: 14,
+            bags: 6,
+            trans: "Manual",
+            ac: true,
+            price: 900000,
+          },
+        ],
+        orders: [],
+      };
+      let db = load(),
+        admin = false;
+      function load() {
+        try {
+          const r = localStorage.getItem(KEY);
+          if (r) return JSON.parse(r);
+        } catch (e) {}
+        return JSON.parse(JSON.stringify(seed));
+      }
+      function save() {
+        try {
+          localStorage.setItem(KEY, JSON.stringify(db));
+          return true;
+        } catch (e) {
+          toast("Penyimpanan penuh. Gunakan foto lebih kecil", "err");
+          return false;
+        }
+      }
+      try {
+        admin = sessionStorage.getItem("jr_admin") === "1";
+      } catch (e) {}
+
+      function openModal(h) {
+        const m = $("#modal");
+        m.innerHTML = "<div>" + h + "</div>";
+        m.classList.remove("hide");
+      }
+      function closeModal() {
+        $("#modal").classList.add("hide");
+      }
+      $("#modal").addEventListener("click", (e) => {
+        if (e.target.id === "modal") closeModal();
+      });
+
+      function route() {
+        const h = location.hash;
+        if (h === "#/admin") return admin ? dash() : login();
+        landing();
+      }
+      window.addEventListener("hashchange", route);
+
+      function nav() {
+        const L = document.querySelector(".logo");
+        if (L)
+          L.innerHTML =
+            "<i>" +
+            esc(S().brand.charAt(0).toUpperCase()) +
+            "</i>" +
+            esc(S().brand);
+        $("#nav").innerHTML = admin
+          ? '<a href="#/">Beranda</a> · <a href="#/admin">Dashboard</a>'
+          : location.hash === "#/admin"
+            ? '<a href="#/">Beranda</a>'
+            : '<a href="#/admin">Admin</a>';
+      }
+
+      const LOGO =
+        "data:image/webp;base64,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";
+      const SITE0 = {
+        brand: "Jogja Rental",
+        title: "Keliling Jogja tanpa ribet urusan mobil",
+        desc: "Armada bersih dan terawat, bisa lepas kunci atau dengan sopir. Pesan dari HP, admin langsung menghubungi lewat WhatsApp.",
+        cta: "Pesan sekarang",
+        chips: [
+          "Antar ke Bandara YIA",
+          "Jemput di Stasiun Tugu",
+          "Sopir opsional",
+        ],
+        dests: [
+          "Malioboro",
+          "Keraton",
+          "Borobudur",
+          "Prambanan",
+          "Parangtritis",
+          "Lava Tour Merapi",
+        ],
+        destT: "Tujuan favorit tamu kami",
+        carT: "Pilih armada",
+        stepT: "Cara pesan",
+        steps: [
+          ["Isi form", "Pilih mobil, tanggal, dan lama sewa."],
+          ["Admin konfirmasi", "Pesanan Anda diperiksa oleh admin."],
+          [
+            "Dapat kabar di WhatsApp",
+            "Detail dan nomor Anda dikirim lewat chat.",
+          ],
+        ],
+        formT: "Form pemesanan",
+        foot: "© Jogja Rental · Demo · Yogyakarta",
+        logo: "",
+      };
+      const S = () => Object.assign({}, SITE0, db.site || {});
+      function siteView() {
+        const s = S();
+        let lg = s.logo || "";
+        const f = (id, l, v) =>
+          `<label>${l}</label><input id="${id}" value="${esc(v)}">`;
+        const ta = (id, l, v, r = 3) =>
+          `<label>${l}</label><textarea id="${id}" rows="${r}">${esc(v)}</textarea>`;
+        $("#tb").innerHTML =
+          `<div class="card"><h2 style="margin-top:0">Hero dan logo</h2>${f("sb", "Nama brand (header)", s.brand)}${f("st", "Judul utama", s.title)}${ta("sd", "Deskripsi", s.desc)}${f("sc", "Teks tombol", s.cta)}${ta("sh", "Label layanan (satu per baris)", s.chips.join("\n"))}
+<label>Logo (tampil di hero)</label><div class="lp"><img id="lp" alt="" src="${esc(lg || LOGO)}"></div><input id="lf" type="file" accept="image/*" style="margin-top:8px"><div class="row"><button class="g" id="lr">Pakai logo bawaan</button></div></div>
+<div class="card" style="margin-top:12px"><h2 style="margin-top:0">Bagian halaman</h2>${f("sx", "Judul tujuan wisata", s.destT)}${ta("sy", "Daftar tujuan (satu per baris)", s.dests.join("\n"))}${f("sz", "Judul armada", s.carT)}${f("sw", "Judul cara pesan", s.stepT)}${s.steps.map((p, i) => f("t" + i, "Langkah " + (i + 1) + ": judul", p[0]) + f("u" + i, "Langkah " + (i + 1) + ": keterangan", p[1])).join("")}${f("sf", "Judul form pemesanan", s.formT)}${f("sg", "Teks footer", s.foot)}</div>
+<button class="full" id="ss">Simpan perubahan</button><div class="row"><button class="g" onclick="location.hash='#/'">Lihat halaman</button><button class="g" id="sr">Kembalikan ke awal</button></div>`;
+        $("#lf").onchange = (e) => {
+          const f = e.target.files[0];
+          if (!f) return;
+          if (!f.type.startsWith("image/"))
+            return toast("File harus berupa gambar", "err");
+          const fr = new FileReader();
+          fr.onload = () => {
+            const t = new Image();
+            t.onload = () => {
+              const k = Math.min(1, 560 / Math.max(t.width, t.height)),
+                cv = document.createElement("canvas");
+              cv.width = Math.round(t.width * k);
+              cv.height = Math.round(t.height * k);
+              cv.getContext("2d").drawImage(t, 0, 0, cv.width, cv.height);
+              lg = cv.toDataURL("image/webp", 0.88);
+              $("#lp").src = lg;
+              toast("Logo dimuat, klik Simpan perubahan", "inf");
+            };
+            t.onerror = () => toast("Gambar tidak dapat dibaca", "err");
+            t.src = fr.result;
+          };
+          fr.readAsDataURL(f);
+        };
+        $("#lr").onclick = () => {
+          lg = "";
+          $("#lp").src = LOGO;
+          toast("Logo bawaan dipilih, klik Simpan perubahan", "inf");
+        };
+        $("#ss").onclick = () => {
+          const g = (id) => $("#" + id).value.trim(),
+            L = (id) =>
+              $("#" + id)
+                .value.split("\n")
+                .map((x) => x.trim())
+                .filter(Boolean);
+          if (!g("st") || !g("sb"))
+            return toast("Nama brand dan judul utama wajib diisi", "err");
+          db.site = {
+            brand: g("sb"),
+            title: g("st"),
+            desc: g("sd"),
+            cta: g("sc") || "Pesan sekarang",
+            chips: L("sh"),
+            dests: L("sy"),
+            destT: g("sx"),
+            carT: g("sz"),
+            stepT: g("sw"),
+            steps: [0, 1, 2].map((i) => [g("t" + i), g("u" + i)]),
+            formT: g("sf"),
+            foot: g("sg"),
+            logo: lg,
+          };
+          if (save()) {
+            nav();
+            notice("Tersimpan", "Konten web berhasil diperbarui.");
+          }
+        };
+        $("#sr").onclick = () =>
+          ask(
+            "Kembalikan semua konten web ke bawaan?",
+            () => {
+              delete db.site;
+              save();
+              nav();
+              toast("Konten dikembalikan", "inf");
+              siteView();
+            },
+            "Ya, kembalikan",
+          );
+      }
+      let lastOrder = null;
+      const waNum = (p) => {
+        let d = String(p).replace(/\D/g, "");
+        if (d.startsWith("0")) d = "62" + d.slice(1);
+        else if (d.startsWith("8")) d = "62" + d;
+        return d;
+      };
+      function ftoast(m, t) {
+        const e = document.createElement("div");
+        e.className = "toast " + t;
+        e.textContent = m;
+        $("#toasts").appendChild(e);
+        setTimeout(() => e.remove(), 3200);
+      }
+      function notice(t, x) {
+        if (window.Swal)
+          Swal.fire({
+            icon: "success",
+            title: t,
+            text: x,
+            confirmButtonText: "Oke",
+          });
+        else {
+          openModal(
+            `<h2 style="margin-top:0">${esc(t)}</h2><p>${esc(x)}</p><div class="row"><button onclick="closeModal()">Oke</button></div>`,
+          );
+        }
+      }
+      function toast(m, t = "") {
+        if (!window.Swal) return ftoast(m, t);
+        Swal.fire({
+          toast: true,
+          position: "top",
+          icon: t === "err" ? "error" : t === "inf" ? "info" : "success",
+          title: m,
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+        });
+      }
+      function ask(msg, cb, ok = "Ya, lanjutkan") {
+        if (!window.Swal) {
+          openModal(
+            `<p>${esc(msg)}</p><div class="row"><button id="y">${esc(ok)}</button><button class="g" onclick="closeModal()">Batal</button></div>`,
+          );
+          $("#y").onclick = () => {
+            closeModal();
+            cb();
+          };
+          return;
+        }
+        Swal.fire({
+          title: msg,
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: ok,
+          cancelButtonText: "Batal",
+          reverseButtons: true,
+          focusCancel: true,
+        }).then((r) => {
+          if (r.isConfirmed) cb();
+        });
+      }
+      window.addEventListener("storage", (e) => {
+        if (e.key !== KEY) return;
+        const n = db.orders.length;
+        db = load();
+        if (
+          admin &&
+          location.hash === "#/admin" &&
+          $("#modal").classList.contains("hide")
+        ) {
+          if (db.orders.length > n) toast("Pesanan baru masuk", "inf");
+          dash();
+        }
+      });
+      /* ---------- LANDING ---------- */
+      function landing() {
+        nav();
+        const today = new Date().toISOString().slice(0, 10);
+        $("#app").innerHTML = `
+<section class="hero"><h1>${esc(S().title)}</h1>
+<p>${esc(S().desc)}</p>
+<a class="cta" href="#pesan">${esc(S().cta)}</a>
+<div class="chips">${S()
+          .chips.map((x) => `<span class="chip">${esc(x)}</span>`)
+          .join("")}</div>
+<img class="lg" alt="Logo" src="${esc(S().logo || LOGO)}"></section>
+<div class="over"><h2 style="margin-top:6px">${esc(S().destT)}</h2>
+<div class="scroll">${S()
+          .dests.map((x) => `<span class="dest">${esc(x)}</span>`)
+          .join("")}</div>
+<h2>${esc(S().carT)}</h2>
+<div class="grid cars">${db.cars.map((c) => carCard(c)).join("") || '<p class="mut">Belum ada armada. Admin dapat menambahkannya di dashboard.</p>'}</div>
+<h2>${esc(S().stepT)}</h2>
+<div class="steps">${S()
+          .steps.map(
+            (p, i) =>
+              `<div class="card step"><b>${i + 1}</b><br><b style="all:unset;font-weight:700">${esc(p[0])}</b><div class="mut">${esc(p[1])}</div></div>`,
+          )
+          .join("")}</div>
+<h2 id="pesan">${esc(S().formT)}</h2>
+${lastOrder ? `<div class="card okc" id="okc"><b>Pesanan terkirim ke admin</b><div class="mut">Kode ${esc(lastOrder.code)} · ${esc(lastOrder.name)} · ${esc(lastOrder.phone)}<br>Status: menunggu konfirmasi. Anda akan dihubungi lewat WhatsApp.</div><div class="row"><button class="g" onclick="lastOrder=null;landing()">Buat pesanan baru</button></div></div>` : ""}<div class="card"><form id="f" onsubmit="return false"><div class="formgrid">
+<div><label>Nama lengkap</label><input id="n" required placeholder="Contoh: Budi Santoso"></div>
+<div><label>No. HP / WhatsApp</label><input id="p" type="tel" inputmode="tel" required placeholder="08xxxxxxxxxx"></div>
+<div class="s2"><label>Pilih mobil</label><select id="c">${db.cars.map((c) => `<option value="${c.id}">${esc(c.name)} - ${rp(c.price)}/hari</option>`).join("")}</select></div>
+<div><label>Tanggal mulai</label><input id="d" type="date" min="${today}" value="${today}"></div>
+<div><label>Lama sewa (hari)</label><input id="h" type="number" min="1" value="1" inputmode="numeric"></div>
+<div class="s2"><label>Catatan (opsional)</label><textarea id="t" rows="2" placeholder="Jemput di Bandara YIA, dengan sopir, dll"></textarea></div></div>
+<div class="est"><span class="mut">Perkiraan total</span><b id="est">Rp 0</b></div>
+<button class="full" id="go">Kirim pesanan</button></form></div>
+<footer>${esc(S().foot)}</footer></div>`;
+        const upd = () => {
+          const c = carOf($("#c").value),
+            h = parseInt($("#h").value) || 0;
+          $("#est").textContent = rp(c ? c.price * Math.max(h, 0) : 0);
+        };
+        $("#c").onchange = upd;
+        $("#h").oninput = upd;
+        upd();
+        $("#go").onclick = () => {
+          const n = $("#n").value.trim(),
+            p = $("#p")
+              .value.trim()
+              .replace(/[^\d+]/g, ""),
+            c = $("#c").value,
+            h = parseInt($("#h").value);
+          if (!n || p.length < 9 || !c || !h || h < 1)
+            return toast(
+              "Lengkapi nama, nomor HP, mobil, dan lama sewa",
+              "err",
+            );
+          const b = $("#go");
+          b.disabled = true;
+          b.textContent = "Mengirim pesanan...";
+          setTimeout(() => {
+            const o = {
+              id: uid(),
+              name: n,
+              phone: p,
+              car: c,
+              date: $("#d").value,
+              days: h,
+              note: $("#t").value.trim(),
+              status: "Menunggu",
+              at: Date.now(),
+            };
+            o.code = "JR" + o.id.slice(-4).toUpperCase();
+            db.orders.unshift(o);
+            if (!save()) {
+              db.orders.shift();
+              b.disabled = false;
+              b.textContent = "Kirim pesanan";
+              return;
+            }
+            lastOrder = o;
+            landing();
+            const k = $("#okc");
+            if (k) k.scrollIntoView({ behavior: "smooth", block: "center" });
+            notice(
+              "Pesanan terkirim ke admin",
+              "Kode pesanan " +
+                o.code +
+                ". Admin akan menghubungi Anda lewat WhatsApp.",
+            );
+          }, 700);
+        };
+      }
+      function pick(id) {
+        $("#c").value = id;
+        $("#c").dispatchEvent(new Event("change"));
+        $("#pesan").scrollIntoView();
+        toast("Mobil dipilih, lengkapi form di bawah", "inf");
+      }
+
+      /* ---------- LOGIN ---------- */
+      function login() {
+        nav();
+        $("#app").innerHTML =
+          `<div class="card" style="max-width:380px;margin:30px auto"><h2 style="margin-top:0">Login Admin</h2>
+<label>Email</label><input id="e" type="email" autocomplete="username">
+<label>Password</label><input id="pw" type="password" autocomplete="current-password">
+<button class="full" id="li">Masuk</button>
+<div class="demo">Demo: admin@exsample.com / admin3232</div></div>`;
+        $("#li").onclick = () => {
+          if (
+            $("#e").value.trim() === "admin@exsample.com" &&
+            $("#pw").value === "admin3232"
+          ) {
+            admin = true;
+            try {
+              sessionStorage.setItem("jr_admin", "1");
+            } catch (e) {}
+            toast("Login berhasil");
+            dash();
+          } else toast("Email atau password salah", "err");
+        };
+      }
+
+      /* ---------- DASHBOARD ---------- */
+      let tab = "orders";
+      function dash() {
+        nav();
+        const pend = db.orders.filter((o) => o.status === "Menunggu").length;
+        $("#app").innerHTML = `<div class="tabs">
+<button class="${tab === "orders" ? "" : "g"}" onclick="tab='orders';dash()">Pesanan (${pend} baru)</button>
+<button class="${tab === "cars" ? "" : "g"}" onclick="tab='cars';dash()">Mobil</button>
+<button class="${tab === "site" ? "" : "g"}" onclick="tab='site';dash()">Konten Web</button>
+<button class="${tab === "set" ? "" : "g"}" onclick="tab='set';dash()">Pengaturan</button>
+<button class="g" onclick="logout()">Keluar</button></div><div id="tb"></div>`;
+        ({ orders: ordersView, cars: carsView, site: siteView, set: setView })[
+          tab
+        ]();
+      }
+      function logout() {
+        admin = false;
+        try {
+          sessionStorage.removeItem("jr_admin");
+        } catch (e) {}
+        toast("Anda telah keluar", "inf");
+        location.hash = "#/";
+      }
+      const carOf = (id) => db.cars.find((c) => c.id === id);
+      const badge = (s) =>
+        `<span class="badge ${s === "Dikonfirmasi" ? "ok" : s === "Ditolak" || s === "Dibatalkan" ? "no" : ""}">${s}</span>`;
+
+      function ordersView() {
+        $("#tb").innerHTML = db.orders.length
+          ? db.orders
+              .map((o) => {
+                const c = carOf(o.car);
+                const tot = c ? c.price * o.days : 0;
+                return `<div class="card item">
+<div class="top"><b>${esc(o.name)}</b>${badge(o.status)}</div>
+<div class="mut">${o.code ? "Kode " + esc(o.code) + "<br>" : ""}${esc(o.phone)}<br>${c ? esc(c.name) : "(mobil dihapus)"} · ${esc(o.date)} · ${o.days} hari<br>Total: <b>${rp(tot)}</b>${o.note ? "<br>Catatan: " + esc(o.note) : ""}</div>
+<div class="row">${o.status === "Menunggu" ? `<button class="w" onclick="confirmOrder('${o.id}')">Konfirmasi dan kirim invoice</button>` : o.status === "Dikonfirmasi" ? `<button class="w" onclick="sendPanel('${o.id}','confirm')">Kirim ulang invoice</button>` : `<button class="w" onclick="sendPanel('${o.id}','cancel')">Kirim ulang info pembatalan</button>`}<button class="g" onclick="editOrder('${o.id}')">Edit</button>${o.status === "Dibatalkan" || o.status === "Ditolak" ? "" : `<button class="g" onclick="cancelOrder('${o.id}')">Batalkan</button>`}<button class="d" onclick="delOrder('${o.id}')">Hapus</button></div></div>`;
+              })
+              .join("")
+          : '<p class="mut">Belum ada pesanan. Buka Beranda dan buat pesanan untuk mencoba.</p>';
+      }
+
+      function confirmOrder(id) {
+        ask(
+          "Konfirmasi pesanan ini dan kirim detailnya ke WhatsApp?",
+          () => doConfirm(id),
+          "Ya, konfirmasi",
+        );
+      }
+      function toJpeg(src) {
+        return new Promise((ok, no) => {
+          const i = new Image();
+          i.onload = () => {
+            const cv = document.createElement("canvas");
+            cv.width = i.width;
+            cv.height = i.height;
+            const x = cv.getContext("2d");
+            x.fillStyle = "#fff";
+            x.fillRect(0, 0, cv.width, cv.height);
+            x.drawImage(i, 0, 0);
+            ok({
+              data: cv.toDataURL("image/jpeg", 0.92),
+              w: i.width,
+              h: i.height,
+            });
+          };
+          i.onerror = () => no(new Error("logo"));
+          i.src = src;
+        });
+      }
+      const pd = (v) =>
+        typeof v === "string" && /^\d{4}-\d\d-\d\d$/.test(v)
+          ? new Date(v + "T00:00:00")
+          : new Date(v);
+      const fd = (v) => {
+        const x = pd(v);
+        return isNaN(x)
+          ? "-"
+          : x.toLocaleDateString("id-ID", {
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+            });
+      };
+      const addDays = (v, n) => {
+        const x = pd(v);
+        x.setDate(x.getDate() + n);
+        return x;
+      };
+      async function makePdf(o, type) {
+        if (!window.jspdf) throw new Error("pdf lib");
+        const cx = type === "cancel",
+          c = carOf(o.car) || {
+            name: "(mobil dihapus)",
+            cat: "",
+            seat: "-",
+            bags: "-",
+            trans: "-",
+            ac: true,
+            price: 0,
+          };
+        const d = new window.jspdf.jsPDF({ unit: "mm", format: "a4" }),
+          W = 210,
+          M = 16,
+          ink = [16, 26, 51],
+          gold = [217, 164, 65],
+          gr = [107, 114, 128],
+          ac = cx ? [185, 28, 28] : [21, 128, 61];
+        const T = (t, x, y, al) =>
+            d.text(String(t), x, y, al ? { align: al } : undefined),
+          F = (b, s, col) => {
+            d.setFont("helvetica", b ? "bold" : "normal");
+            d.setFontSize(s);
+            d.setTextColor(...(col || ink));
+          };
+        const days = o.days || 1,
+          tot = c.price * days,
+          code = o.code || String(o.id).slice(-4).toUpperCase();
+        d.setFillColor(...ink);
+        d.rect(0, 0, W, 6, "F");
+        d.setFillColor(...gold);
+        d.rect(0, 6, W, 1.4, "F");
+        try {
+          const lg = await toJpeg(S().logo || LOGO),
+            h = 30;
+          d.addImage(lg.data, "JPEG", M, 13, (h * lg.w) / lg.h, h);
+        } catch (e) {
+          F(1, 16);
+          T(S().brand, M, 25);
+        }
+        F(1, cx ? 17 : 21);
+        T(
+          cx ? "PEMBERITAHUAN PEMBATALAN" : "INVOICE BOOKING",
+          W - M,
+          23,
+          "right",
+        );
+        F(0, 10, gr);
+        T("No. dokumen  INV-" + code, W - M, 30, "right");
+        T("Tanggal terbit  " + fd(Date.now()), W - M, 35.5, "right");
+        d.setFillColor(...ac);
+        d.roundedRect(W - M - 40, 39, 40, 8, 2, 2, "F");
+        F(1, 10, [255, 255, 255]);
+        T(cx ? "DIBATALKAN" : "DIKONFIRMASI", W - M - 20, 44.4, "center");
+        d.setDrawColor(225, 229, 238);
+        d.line(M, 52, W - M, 52);
+        F(1, 11);
+        T("Data pelanggan", M, 61);
+        T("Periode sewa", 112, 61);
+        F(0, 10, gr);
+        T("Nama", M, 68);
+        T("No. WhatsApp", M, 74);
+        T("Kode pesanan", M, 80);
+        T("Tanggal mulai", 112, 68);
+        T("Tanggal kembali", 112, 74);
+        T("Lama sewa", 112, 80);
+        F(0, 10);
+        T(d.splitTextToSize(String(o.name), 58)[0], M + 32, 68);
+        T(o.phone, M + 32, 74);
+        T(code, M + 32, 80);
+        T(fd(o.date), 144, 68);
+        T(fd(addDays(o.date, days)), 144, 74);
+        T(days + " hari", 144, 80);
+        d.setFillColor(243, 245, 249);
+        d.roundedRect(M, 88, W - 2 * M, 34, 3, 3, "F");
+        F(1, 11);
+        T("Spesifikasi mobil", M + 5, 96);
+        F(1, 12);
+        T(d.splitTextToSize(c.name, 80)[0], M + 5, 104);
+        F(0, 9.5, gr);
+        T(c.cat || "", M + 5, 110);
+        F(0, 10, gr);
+        T("Kursi", 112, 96);
+        T("Bagasi", 112, 102);
+        T("Transmisi", 112, 108);
+        T("Pendingin", 112, 114);
+        F(0, 10);
+        T(c.seat + " penumpang", 144, 96);
+        T(c.bags + " bagasi", 144, 102);
+        T(c.trans, 144, 108);
+        T(c.ac === false ? "Tidak ada AC" : "AC", 144, 114);
+        let y = 132;
+        d.setFillColor(...ink);
+        d.rect(M, y, W - 2 * M, 9, "F");
+        F(1, 10, [255, 255, 255]);
+        T("Deskripsi", M + 4, y + 6);
+        T("Lama", 118, y + 6, "right");
+        T("Harga / hari", 152, y + 6, "right");
+        T("Subtotal", W - M - 4, y + 6, "right");
+        y += 9;
+        F(0, 10);
+        T(d.splitTextToSize("Sewa " + c.name, 78)[0], M + 4, y + 7);
+        T(days + " hari", 118, y + 7, "right");
+        T(rp(c.price), 152, y + 7, "right");
+        T(rp(tot), W - M - 4, y + 7, "right");
+        d.setDrawColor(225, 229, 238);
+        d.line(M, y + 11, W - M, y + 11);
+        y += 11;
+        if (!cx) {
+          d.setFillColor(...gold);
+          d.roundedRect(112, y + 5, W - M - 112, 11, 2, 2, "F");
+          F(1, 11, [26, 18, 4]);
+          T("Total", 116, y + 12.2);
+          T(rp(tot), W - M - 4, y + 12.2, "right");
+          y += 22;
+        } else {
+          d.setDrawColor(...ac);
+          d.roundedRect(M, y + 6, W - 2 * M, 24, 2, 2);
+          F(1, 10.5, ac);
+          T(
+            "Pesanan ini telah dibatalkan. Tidak ada tagihan yang harus dibayar.",
+            M + 5,
+            y + 14,
+          );
+          F(0, 10);
+          d.text(
+            d
+              .splitTextToSize(
+                "Alasan: " + (o.reason || "Tidak disebutkan."),
+                W - 2 * M - 10,
+              )
+              .slice(0, 2),
+            M + 5,
+            y + 21,
+          );
+          y += 36;
+        }
+        F(1, 10);
+        T("Catatan", M, y + 4);
+        F(0, 9.5, gr);
+        (cx
+          ? [
+              "Mohon maaf atas ketidaknyamanannya. Anda dapat membuat pesanan baru kapan saja.",
+              "Pertanyaan? Hubungi admin di WhatsApp +" + db.wa + ".",
+            ]
+          : [
+              "Pembatalan gratis. Kilometer tidak terbatas.",
+              "Pertanyaan? Hubungi admin di WhatsApp +" + db.wa + ".",
+            ]
+        ).forEach((t, i) => T("- " + t, M, y + 10 + i * 5.5));
+        F(0, 10, gr);
+        T("Disetujui oleh", W - M - 31, 238, "center");
+        d.setDrawColor(...ink);
+        d.line(W - M - 62, 260, W - M, 260);
+        F(1, 11);
+        T("Paskalis Herlambang", W - M - 31, 266, "center");
+        F(0, 10, gr);
+        T("Founder", W - M - 31, 271.5, "center");
+        d.setFillColor(...ink);
+        d.rect(0, 288, W, 9, "F");
+        F(0, 8.5, [203, 211, 230]);
+        T(
+          S().brand +
+            "  |  Yogyakarta  |  Dokumen ini diterbitkan oleh sistem pemesanan.",
+          W / 2,
+          293.6,
+          "center",
+        );
+        return d.output("blob");
+      }
+      function waMsg(o, t) {
+        const c = carOf(o.car),
+          code = o.code || "-",
+          nm = c ? c.name : "-";
+        if (t === "cancel")
+          return `Halo ${o.name},\n\nKami informasikan bahwa pesanan rental mobil Anda telah *DIBATALKAN*.\n\nKode pesanan: ${code}\nMobil: ${nm}\nTanggal mulai: ${fd(o.date)}\nLama sewa: ${o.days} hari\nAlasan: ${o.reason || "-"}\n\nMohon maaf atas ketidaknyamanannya. Anda dapat membuat pesanan baru kapan saja.\nHubungi admin: wa.me/${db.wa}\n\n${S().brand}`;
+        return `Halo ${o.name},\n\nPesanan rental mobil Anda telah *DIKONFIRMASI*.\n\nKode pesanan: ${code}\nMobil: ${nm}\nTanggal mulai: ${fd(o.date)}\nTanggal kembali: ${fd(addDays(o.date, o.days))}\nLama sewa: ${o.days} hari\nTotal: ${rp(c ? c.price * o.days : 0)}\n\nInvoice booking (PDF) kami lampirkan pada chat ini. Disetujui oleh Paskalis Herlambang, Founder.\n\nTerima kasih telah memilih ${S().brand}.\nHubungi admin: wa.me/${db.wa}`;
+      }
+      async function sendPanel(id, type) {
+        const o = db.orders.find((x) => x.id === id);
+        if (!o) return;
+        const cx = type === "cancel",
+          fn = (cx ? "Pembatalan-" : "Invoice-") + (o.code || o.id) + ".pdf",
+          msg = waMsg(o, type),
+          url =
+            "https://wa.me/" +
+            waNum(o.phone) +
+            "?text=" +
+            encodeURIComponent(msg);
+        toast(
+          "Menyiapkan " +
+            (cx ? "pemberitahuan pembatalan" : "invoice PDF") +
+            "...",
+          "inf",
+        );
+        let blob = null;
+        try {
+          blob = await makePdf(o, type);
+        } catch (e) {
+          toast("PDF gagal dibuat. Pesan WhatsApp tetap bisa dikirim.", "err");
+        }
+        openModal(`<h2 style="margin-top:0">${cx ? "Pesanan dibatalkan" : "Pesanan dikonfirmasi"}</h2><p class="mut">${esc(o.name)} · ${esc(o.phone)} · kode ${esc(o.code || "-")}.<br>Kirim ${cx ? "info pembatalan" : "invoice"} ke pelanggan dengan dua langkah:</p>
+${blob ? `<button class="full" id="k1">1. Bagikan atau simpan PDF ${cx ? "pembatalan" : "invoice"}</button>` : ""}
+<button class="w full" id="k2">${blob ? "2. " : ""}Buka chat WhatsApp pelanggan</button>
+<p class="mut" style="margin-top:12px">Teks pesan sudah terisi. WhatsApp tidak mengizinkan lampiran terkirim otomatis dari web, jadi lampirkan file PDF dari langkah 1 pada chat. Di HP, langkah 1 membuka menu bagikan sehingga PDF bisa langsung dikirim lewat WhatsApp.</p>
+<button class="g full" onclick="closeModal()">Selesai</button>`);
+        if ($("#k1"))
+          $("#k1").onclick = async () => {
+            try {
+              const f = new File([blob], fn, { type: "application/pdf" });
+              if (navigator.canShare && navigator.canShare({ files: [f] })) {
+                await navigator.share({ files: [f], title: fn, text: msg });
+                return;
+              }
+            } catch (e) {
+              if (e && e.name === "AbortError") return;
+            }
+            try {
+              const dl = window.claude && (await claude.use("downloads"));
+              if (!dl) throw 0;
+              await dl.save({ filename: fn, data: blob });
+              toast("PDF disimpan");
+            } catch (e) {
+              toast(
+                e && e.code === "declined"
+                  ? "Penyimpanan dibatalkan"
+                  : "Penyimpanan PDF tidak tersedia di tampilan ini",
+                "err",
+              );
+            }
+          };
+        $("#k2").onclick = () => {
+          if (!window.open(url, "_blank"))
+            toast("Pop-up diblokir, izinkan pop-up lalu coba lagi", "err");
+        };
+      }
+      function cancelOrder(id) {
+        openModal(
+          `<h2 style="margin-top:0">Batalkan pesanan</h2><label>Alasan pembatalan (opsional, ikut dikirim ke pelanggan)</label><textarea id="rs" rows="3" placeholder="Contoh: unit tidak tersedia pada tanggal tersebut"></textarea><div class="row"><button class="d" id="cx">Batalkan dan kirim info</button><button class="g" onclick="closeModal()">Kembali</button></div>`,
+        );
+        $("#cx").onclick = () => {
+          const o = db.orders.find((x) => x.id === id);
+          o.status = "Dibatalkan";
+          o.reason = $("#rs").value.trim();
+          if (!save()) return;
+          closeModal();
+          dash();
+          sendPanel(id, "cancel");
+        };
+      }
+      function doConfirm(id) {
+        const o = db.orders.find((x) => x.id === id);
+        o.status = "Dikonfirmasi";
+        if (!save()) return;
+        dash();
+        sendPanel(id, "confirm");
+      }
+      function rejectOrder(id) {
+        ask("Tolak pesanan ini?", () => {
+          db.orders.find((x) => x.id === id).status = "Ditolak";
+          save();
+          toast("Pesanan ditolak", "inf");
+          dash();
+        });
+      }
+      function delOrder(id) {
+        ask("Hapus pesanan ini permanen?", () => {
+          db.orders = db.orders.filter((x) => x.id !== id);
+          save();
+          toast("Pesanan dihapus", "err");
+          dash();
+        });
+      }
+      function editOrder(id) {
+        const o = db.orders.find((x) => x.id === id);
+        openModal(`<h2 style="margin-top:0">Edit Pesanan</h2>
+<label>Nama</label><input id="en" value="${esc(o.name)}">
+<label>No. HP</label><input id="ep" value="${esc(o.phone)}">
+<label>Mobil</label><select id="ec">${db.cars.map((c) => `<option value="${c.id}" ${c.id === o.car ? "selected" : ""}>${esc(c.name)}</option>`).join("")}</select>
+<label>Tanggal</label><input id="ed" type="date" value="${esc(o.date)}">
+<label>Lama (hari)</label><input id="eh" type="number" min="1" value="${o.days}">
+<label>Status</label><select id="es">${["Menunggu", "Dikonfirmasi", "Dibatalkan"].map((s) => `<option ${s === o.status ? "selected" : ""}>${s}</option>`).join("")}</select>
+<div class="row"><button id="sv">Simpan</button><button class="g" onclick="closeModal()">Batal</button></div>`);
+        $("#sv").onclick = () => {
+          Object.assign(o, {
+            name: $("#en").value.trim(),
+            phone: $("#ep").value.trim(),
+            car: $("#ec").value,
+            date: $("#ed").value,
+            days: parseInt($("#eh").value) || 1,
+            status: $("#es").value,
+          });
+          save();
+          closeModal();
+          toast("Pesanan diperbarui");
+          dash();
+        };
+      }
+
+      const NOP =
+        '<svg viewBox="0 0 400 170" class="nop"><path d="M30 120c0-14 8-22 22-26l36-30c8-7 18-10 30-10h104c14 0 26 5 36 15l24 22c24 2 40 6 44 18v14c0 6-4 10-10 10H40c-6 0-10-4-10-13z" fill="currentColor"/><circle cx="104" cy="132" r="20" fill="var(--card)"/><circle cx="300" cy="132" r="20" fill="var(--card)"/></svg>';
+      function pic(c) {
+        const p = c.pos || { x: 0, y: 0, z: 1 };
+        return c.img
+          ? `<img src="${c.img}" alt="${esc(c.name)}" style="transform:translate(${p.x}%,${p.y}%) scale(${p.z})">`
+          : NOP;
+      }
+      function carCard(c, adm) {
+        return `<div class="card vc"><b class="nm">${esc(c.name)}</b><div class="mut">${esc(c.cat || "atau setara")}</div>
+<div class="mid"><div class="chips2"><span>${esc(c.seat)} kursi</span><span>${esc(c.bags ?? 2)} bagasi</span><span>${esc(c.trans || "Otomatis")}</span>${c.ac !== false ? "<span>AC</span>" : ""}</div><div class="ph">${pic(c)}</div></div>
+<div class="bt"><div class="mut">Pembatalan gratis<br>Kilometer tidak terbatas</div><div class="pr"><span class="mut">Mulai dari</span><div class="price">${rp(c.price)}</div><span class="mut">per hari</span></div></div>
+${adm ? `<div class="row"><button class="g" onclick="carForm('${c.id}')">Edit</button><button class="d" onclick="delCar('${c.id}')">Hapus</button></div>` : `<button class="full" onclick="pick('${c.id}')">Pilih mobil ini</button>`}</div>`;
+      }
+      function carsView() {
+        $("#tb").innerHTML =
+          `<button onclick="carForm()">Tambah mobil</button><div class="grid cars" style="margin-top:12px">${db.cars.map((c) => carCard(c, true)).join("") || '<p class="mut">Belum ada mobil.</p>'}</div>`;
+      }
+      function carForm(id) {
+        const c = id
+          ? carOf(id)
+          : {
+              name: "",
+              cat: "atau setara",
+              seat: 5,
+              bags: 2,
+              trans: "Otomatis",
+              ac: true,
+              price: 300000,
+            };
+        let img = c.img || "",
+          pos = Object.assign({ x: 0, y: 0, z: 1 }, c.pos || {}),
+          im = null,
+          dr = null;
+        openModal(`<h2 style="margin-top:0">${id ? "Edit" : "Tambah"} mobil</h2>
+<label>Nama mobil</label><input id="cn" value="${esc(c.name)}">
+<label>Kategori</label><input id="cc" value="${esc(c.cat || "")}" placeholder="atau setara MPV standar">
+<div class="formgrid"><div><label>Jumlah kursi</label><input id="cs" type="number" min="1" value="${esc(c.seat)}"></div>
+<div><label>Jumlah bagasi</label><input id="cb" type="number" min="0" value="${esc(c.bags ?? 2)}"></div>
+<div><label>Transmisi</label><select id="ct">${["Otomatis", "Manual"].map((t) => `<option ${t === (c.trans || "Otomatis") ? "selected" : ""}>${t}</option>`).join("")}</select></div>
+<div><label>Harga per hari (Rp)</label><input id="cp" type="number" min="0" value="${esc(c.price)}"></div></div>
+<label><input type="checkbox" id="ca" style="width:auto;margin-right:8px" ${c.ac !== false ? "checked" : ""}>Dilengkapi AC</label>
+<label>Foto mobil (PNG, JPG, atau WebP)</label><input id="cf" type="file" accept="image/*">
+<div id="cw" class="hide"><label>Atur posisi: geser foto di dalam bingkai</label><div class="crop" id="cr"></div>
+<label>Zoom</label><input id="cz" type="range" min="0.4" max="3" step="0.05" value="${pos.z}">
+<div class="row"><button class="g" id="crs">Reset posisi</button></div></div>
+<div class="row" style="margin-top:18px"><button id="sv">Simpan</button><button class="g" onclick="closeModal()">Batal</button></div>`);
+        const cr = $("#cr"),
+          ap = () => {
+            if (im)
+              im.style.transform = `translate(${pos.x}%,${pos.y}%) scale(${pos.z})`;
+          };
+        function show() {
+          $("#cw").classList.remove("hide");
+          cr.innerHTML = "";
+          im = document.createElement("img");
+          im.src = img;
+          cr.appendChild(im);
+          $("#cz").value = pos.z;
+          ap();
+        }
+        if (img) show();
+        $("#cf").onchange = (e) => {
+          const f = e.target.files[0];
+          if (!f) return;
+          if (!f.type.startsWith("image/"))
+            return toast("File harus berupa gambar", "err");
+          const fr = new FileReader();
+          fr.onload = () => {
+            const t = new Image();
+            t.onload = () => {
+              const s = Math.min(1, 800 / Math.max(t.width, t.height)),
+                cv = document.createElement("canvas");
+              cv.width = Math.round(t.width * s);
+              cv.height = Math.round(t.height * s);
+              cv.getContext("2d").drawImage(t, 0, 0, cv.width, cv.height);
+              img = cv.toDataURL("image/webp", 0.85);
+              pos = { x: 0, y: 0, z: 1 };
+              show();
+              toast("Foto dimuat, silakan atur posisinya", "inf");
+            };
+            t.onerror = () => toast("Gambar tidak dapat dibaca", "err");
+            t.src = fr.result;
+          };
+          fr.readAsDataURL(f);
+        };
+        cr.onpointerdown = (e) => {
+          dr = { x: e.clientX, y: e.clientY, px: pos.x, py: pos.y };
+          cr.setPointerCapture(e.pointerId);
+        };
+        cr.onpointermove = (e) => {
+          if (!dr) return;
+          const r = cr.getBoundingClientRect();
+          pos.x = dr.px + ((e.clientX - dr.x) / r.width) * 100;
+          pos.y = dr.py + ((e.clientY - dr.y) / r.height) * 100;
+          ap();
+        };
+        cr.onpointerup = cr.onpointercancel = () => {
+          dr = null;
+        };
+        $("#cz").oninput = (e) => {
+          pos.z = +e.target.value;
+          ap();
+        };
+        $("#crs").onclick = () => {
+          pos = { x: 0, y: 0, z: 1 };
+          $("#cz").value = 1;
+          ap();
+        };
+        $("#sv").onclick = () => {
+          const d = {
+            name: $("#cn").value.trim(),
+            cat: $("#cc").value.trim(),
+            seat: parseInt($("#cs").value) || 1,
+            bags: parseInt($("#cb").value) || 0,
+            trans: $("#ct").value,
+            ac: $("#ca").checked,
+            price: parseInt($("#cp").value) || 0,
+            img,
+            pos: { x: +pos.x.toFixed(2), y: +pos.y.toFixed(2), z: pos.z },
+          };
+          if (!d.name) return toast("Nama mobil wajib diisi", "err");
+          if (id) Object.assign(c, d);
+          else db.cars.push({ id: uid(), ...d });
+          if (!save()) return;
+          closeModal();
+          toast(id ? "Mobil diperbarui" : "Mobil ditambahkan");
+          dash();
+        };
+      }
+      function delCar(id) {
+        ask("Hapus mobil ini?", () => {
+          db.cars = db.cars.filter((c) => c.id !== id);
+          save();
+          toast("Mobil dihapus", "err");
+          dash();
+        });
+      }
+
+      function setView() {
+        $("#tb").innerHTML =
+          `<div class="card"><label>Nomor WhatsApp admin (dicantumkan di pesan ke pelanggan, format 62...)</label><input id="wa" type="tel" value="${esc(db.wa)}">
+<button class="full" id="sw">Simpan</button>
+<button class="g full" id="rs">Reset data demo</button>
+<p class="mut">Saat admin menekan Konfirmasi, WhatsApp terbuka ke nomor pelanggan dengan pesan pesanan telah dikonfirmasi. Nomor admin ini dicantumkan di pesan sebagai kontak.</p></div>`;
+        $("#sw").onclick = () => {
+          const v = $("#wa").value.replace(/\D/g, "");
+          if (v.length < 9) return toast("Nomor tidak valid", "err");
+          db.wa = v;
+          save();
+          toast("Nomor WA disimpan");
+        };
+        $("#rs").onclick = () =>
+          ask("Reset semua data ke awal?", () => {
+            db = JSON.parse(JSON.stringify(seed));
+            save();
+            toast("Data direset", "inf");
+            dash();
+          });
+      }
+
+      route();
+    </script>
+  </body>
+</html>
